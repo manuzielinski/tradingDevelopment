@@ -1,9 +1,9 @@
 package com.manudev.userService.controller;
 
-import com.manudev.Trading.userService.dto.AuthCreateUserDTO;
-import com.manudev.Trading.userService.dto.AuthLoginRequestDTO;
-import com.manudev.Trading.userService.dto.AuthResponseDTO;
-import com.manudev.Trading.userService.service.impl.UserDetailsServiceImpl;
+import com.manudev.userService.dto.AuthCreateUserDTO;
+import com.manudev.userService.dto.AuthLoginRequestDTO;
+import com.manudev.userService.dto.AuthResponseDTO;
+import com.manudev.userService.service.impl.UserDetailsServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

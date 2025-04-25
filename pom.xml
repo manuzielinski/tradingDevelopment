@@ -26,6 +26,7 @@
 		<module>microservices/user-service</module>
 		<module>microservices/coin-service</module>
 		<module>microservices/order-service</module>
+		<module>microservices/wallet-service</module>
 	</modules>
 	<scm>
 		<connection/>

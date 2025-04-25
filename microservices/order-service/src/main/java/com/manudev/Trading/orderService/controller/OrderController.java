@@ -1,18 +1,12 @@
 package com.manudev.Trading.orderService.controller;
 
-import com.manudev.Trading.OrderService.domain.OrderType;
-import com.manudev.Trading.OrderService.model.CreateOrderRequest;
-import com.manudev.Trading.OrderService.model.Order;
-import com.manudev.Trading.OrderService.service.OrderService;
-import com.manudev.Trading.coinService.model.Coin;
-import com.manudev.Trading.coinService.service.CoinService;
-import com.manudev.Trading.userService.dto.UserDTO;
-import com.manudev.Trading.userService.mapper.UserMapper;
-import com.manudev.Trading.userService.model.UserEntity;
-import com.manudev.Trading.userService.service.UserService;
+import com.manudev.Trading.orderService.service.OrderService;
+import com.manudev.Trading.orderService.model.CreateOrderRequest;
+import com.manudev.Trading.orderService.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.manudev.common.dto.UserDTO;
 
 import java.util.List;
 

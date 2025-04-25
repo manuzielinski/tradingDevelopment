@@ -1,6 +1,6 @@
 package com.manudev.userService.repository;
 
-import com.manudev.Trading.userService.model.UserEntity;
+import com.manudev.userService.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,8 +1,7 @@
 package com.manudev.Trading.orderService.model;
 
-import com.manudev.Trading.userService.model.UserEntity;
-import com.manudev.Trading.OrderService.domain.OrderStatus;
-import com.manudev.Trading.OrderService.domain.OrderType;
+import com.manudev.Trading.orderService.domain.OrderStatus;
+import com.manudev.Trading.orderService.domain.OrderType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,8 +16,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
 
-    @ManyToOne
-    private UserEntity user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(nullable = false)
     private OrderType orderType;

@@ -1,7 +1,7 @@
 package com.manudev.userService.mapper;
 
-import com.manudev.Trading.userService.dto.UserDTO;
-import com.manudev.Trading.userService.model.UserEntity;
+import com.manudev.userService.dto.UserDTO;
+import com.manudev.userService.model.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

@@ -1,6 +1,6 @@
 package com.manudev.userService.repository;
 
-import com.manudev.Trading.userService.model.RoleEntity;
+import com.manudev.userService.model.RoleEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.manudev.userService.config;
 
-import com.manudev.Trading.userService.config.filter.JwtTokenValidator;
-import com.manudev.Trading.userService.config.filter.JwtUtil;
+import com.manudev.userService.config.filter.JwtTokenValidator;
+import com.manudev.userService.config.filter.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

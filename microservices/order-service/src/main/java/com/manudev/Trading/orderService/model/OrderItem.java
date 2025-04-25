@@ -1,7 +1,6 @@
 package com.manudev.Trading.orderService.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.manudev.Trading.coinService.model.Coin;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

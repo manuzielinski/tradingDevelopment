@@ -2,9 +2,8 @@ package com.manudev.coinService.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manudev.Trading.coinService.coinRepository.CoinRepository;
-import com.manudev.Trading.coinService.model.Coin;
-import com.manudev.Trading.coinService.service.CoinService;
+import com.manudev.coinService.model.Coin;
+import com.manudev.coinService.service.CoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

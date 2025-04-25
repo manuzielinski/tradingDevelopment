@@ -1,16 +1,12 @@
 package com.manudev.Trading.orderService.service.impl;
 
-import com.manudev.Trading.OrderService.domain.OrderStatus;
-import com.manudev.Trading.OrderService.domain.OrderType;
-import com.manudev.Trading.OrderService.model.Order;
-import com.manudev.Trading.OrderService.model.OrderItem;
-import com.manudev.Trading.OrderService.repository.OrderItemRepository;
-import com.manudev.Trading.OrderService.repository.OrderRepository;
-import com.manudev.Trading.OrderService.service.OrderService;
-import com.manudev.Trading.coinService.model.Coin;
-import com.manudev.Trading.userService.mapper.UserMapper;
-import com.manudev.Trading.userService.model.UserEntity;
-import com.manudev.Trading.walletService.service.WalletService;
+import com.manudev.Trading.orderService.domain.OrderStatus;
+import com.manudev.Trading.orderService.domain.OrderType;
+import com.manudev.Trading.orderService.model.Order;
+import com.manudev.Trading.orderService.model.OrderItem;
+import com.manudev.Trading.orderService.repository.OrderItemRepository;
+import com.manudev.Trading.orderService.repository.OrderRepository;
+import com.manudev.Trading.orderService.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

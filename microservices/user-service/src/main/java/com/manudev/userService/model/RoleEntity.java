@@ -1,6 +1,6 @@
 package com.manudev.userService.model;
 
-import com.manudev.Trading.userService.domain.USER_ROLE;
+import com.manudev.userService.domain.USER_ROLE;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.manudev.userService.dto;
 
-import com.manudev.Trading.userService.domain.USER_ROLE;
+import com.manudev.userService.domain.USER_ROLE;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

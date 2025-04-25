@@ -2,10 +2,10 @@ package com.manudev.coinService.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.manudev.Trading.coinService.coinRepository.CoinRepository;
-import com.manudev.Trading.coinService.model.Coin;
+import com.manudev.coinService.repository.CoinRepository;
+import com.manudev.coinService.model.Coin;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manudev.Trading.coinService.service.CoinService;
+import com.manudev.coinService.service.CoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

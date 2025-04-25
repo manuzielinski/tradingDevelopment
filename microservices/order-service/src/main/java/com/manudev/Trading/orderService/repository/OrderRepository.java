@@ -1,6 +1,6 @@
 package com.manudev.Trading.orderService.repository;
 
-import com.manudev.Trading.OrderService.model.Order;
+import com.manudev.Trading.orderService.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

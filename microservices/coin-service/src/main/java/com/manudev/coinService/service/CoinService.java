@@ -1,7 +1,7 @@
 package com.manudev.coinService.service;
 
-import com.manudev.Trading.coinService.model.Coin;
 import java.util.List;
+import com.manudev.coinService.model.Coin;
 
 public interface CoinService {
 

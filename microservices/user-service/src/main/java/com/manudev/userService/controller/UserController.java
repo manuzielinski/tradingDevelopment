@@ -1,8 +1,8 @@
 package com.manudev.userService.controller;
 
-import com.manudev.Trading.userService.dto.UserDTO;
-import com.manudev.Trading.userService.repository.UserRepository;
-import com.manudev.Trading.userService.service.UserService;
+import com.manudev.userService.dto.UserDTO;
+import com.manudev.userService.repository.UserRepository;
+import com.manudev.userService.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
