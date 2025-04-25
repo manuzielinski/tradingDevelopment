@@ -23,6 +23,9 @@
 	</developers>
 	<modules>
 		<module>commons</module>
+		<module>microservices/user-service</module>
+		<module>microservices/coin-service</module>
+		<module>microservices/order-service</module>
 	</modules>
 	<scm>
 		<connection/>
