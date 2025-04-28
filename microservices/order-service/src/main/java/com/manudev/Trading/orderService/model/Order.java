@@ -2,6 +2,7 @@ package com.manudev.Trading.orderService.model;
 
 import com.manudev.Trading.orderService.domain.OrderStatus;
 import com.manudev.Trading.orderService.domain.OrderType;
+import com.manudev.common.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -32,4 +33,8 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private OrderItem orderItem;
+
+    public void setUserDTO(UserDTO userDTO) {
+        this.userId = userDTO.getUserID();  // we only use the userID, not the entire entity
+    }
 }

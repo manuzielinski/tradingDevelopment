@@ -1,10 +1,10 @@
 package com.manudev.userService.service.impl;
 
-import com.manudev.Trading.userService.dto.UserDTO;
-import com.manudev.Trading.userService.mapper.UserMapper;
-import com.manudev.Trading.userService.model.UserEntity;
-import com.manudev.Trading.userService.repository.UserRepository;
-import com.manudev.Trading.userService.service.UserService;
+import com.manudev.userService.config.filter.JwtUtil;
+import com.manudev.userService.mapper.UserMapper;
+import com.manudev.userService.model.UserEntity;
+import com.manudev.userService.repository.UserRepository;
+import com.manudev.userService.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,42 +15,35 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private JwtUtil jwtUtil;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserRepository userRepository;
 
     @Override
-    public List<UserDTO> listAllUsers() {
-        List<UserEntity> users = userRepository.findAll();
-        return users.stream()
-                .map(userMapper::userToDTO)
-                .collect(Collectors.toList());
+    public List<UserEntity> listAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
-    public UserDTO getUserByID(Long userID) {
-        UserEntity user = userRepository.findById(userID)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return userMapper.userToDTO(user);
+    public UserEntity getUserByID(Long userID) {
+        return userRepository.findById(userID)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
-        UserEntity user = userMapper.dtoToUser(userDTO);
-        userRepository.save(user);
-        return userMapper.userToDTO(user);
+    public UserEntity createUser(UserEntity userEntity) {
+        return userRepository.save(userEntity);
     }
 
     @Override
-    public UserDTO updateUser(Long userID, UserDTO userDTO) {
+    public UserEntity updateUser(Long userID, UserEntity userEntity) {
         // first, we're going to find the old user:
         UserEntity oldUser = userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         // later, locate the new one
-        UserEntity updatedUser = userMapper.dtoToUser(userDTO);
-        updatedUser.setUserID(oldUser.getUserID());
-        return userMapper.userToDTO(updatedUser);
+        userEntity.setUserID(oldUser.getUserID());
+        return userRepository.save(userEntity);
     }
 
     @Override
@@ -62,13 +55,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findUserProfileByJwt(String jwt) {
-        String email = JwtProvi
-        return null;
+    public UserEntity findUserProfileByJwt(String jwt) {
+        String email = jwtUtil.getEmailFromToken(jwt);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 
     @Override
-    public UserDTO findUserByEmail(String email) {
-        return null;
+    public UserEntity findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 }

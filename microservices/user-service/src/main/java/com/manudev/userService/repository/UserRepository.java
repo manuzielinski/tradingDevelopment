@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query("SELECT o FROM Order o WHERE o.active = true")
     List<UserEntity> findAllActiveUsers();
+
+    Optional<UserEntity> findByEmail(String email);
 }

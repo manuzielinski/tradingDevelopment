@@ -23,9 +23,6 @@ public class OrderController {
     @Autowired
     private CoinService coinService;
 
-    @Autowired
-    private UserMapper userMapper;
-
 //     @Autowired
 //    private WalletTransactionService walletTransactionService;
 
