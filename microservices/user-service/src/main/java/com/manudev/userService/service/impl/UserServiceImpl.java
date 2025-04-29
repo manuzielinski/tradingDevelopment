@@ -72,13 +72,13 @@ public class UserServiceImpl implements UserService {
         String email = jwtUtil.getEmailFromToken(jwt);
         UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Email no encontrado"));
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return userMapper.userToDTO(userEntity);
     }
 
     @Override
     public UserDTO findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return userMapper.userToDTO(userEntity);
     }
 }

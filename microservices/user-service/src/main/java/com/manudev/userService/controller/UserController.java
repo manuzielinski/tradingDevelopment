@@ -1,6 +1,6 @@
 package com.manudev.userService.controller;
 
-import com.manudev.userService.model.UserEntity;
+import com.manudev.common.dto.UserDTO;
 import com.manudev.userService.repository.UserRepository;
 import com.manudev.userService.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +19,23 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{userID}")
-    public UserEntity getUserByID(@PathVariable Long userID) {
+    public UserDTO getUserByID(@PathVariable Long userID) {
         return userService.getUserByID(userID);
     }
 
     @GetMapping
-    public List<UserEntity> listAllUsers() {
+    public List<UserDTO> listAllUsers() {
         return userService.listAllUsers();
     }
 
     @PostMapping
-    public UserEntity createUser(@RequestBody UserEntity userEntity) {
-        return userService.createUser(userEntity);
+    public UserDTO createUser(@RequestBody UserDTO userDTO) {
+        return userService.createUser(userDTO);
     }
 
     @PutMapping("/{userID}")
-    public UserEntity updateUser(@PathVariable Long userID, @RequestBody UserEntity userEntity) {
-        return userService.updateUser(userID, userEntity);
+    public UserDTO updateUser(@PathVariable Long userID, @RequestBody UserDTO userDTO) {
+        return userService.updateUser(userID, userDTO);
     }
 
     @DeleteMapping("/{userID}")
@@ -45,12 +45,12 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public UserEntity getUserProfileByJwt(@RequestHeader("Authorization") String jwt) {
+    public UserDTO getUserProfileByJwt(@RequestHeader("Authorization") String jwt) {
         return userService.findUserProfileByJwt(jwt);
     }
 
     @GetMapping("/email/{email}")
-    public UserEntity getUserByEmail(@PathVariable String email) {
+    public UserDTO getUserByEmail(@PathVariable String email) {
         return userService.findUserByEmail(email);
     }
 
