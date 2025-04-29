@@ -1,16 +1,16 @@
 package com.manudev.userService.service;
 
-import com.manudev.userService.model.UserEntity;
+import com.manudev.common.dto.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
 
-    public List<UserEntity> listAllUsers();
-    UserEntity getUserByID(Long userID);
-    UserEntity createUser(UserEntity userEntity);
-    UserEntity updateUser(Long userID, UserEntity userEntity);
+    List<UserDTO> listAllUsers();
+    UserDTO getUserByID(Long userID);
+    UserDTO createUser(UserDTO userDTO);
+    UserDTO updateUser(Long userID, UserDTO userDTO);
     void deleteUser(Long userID);
-    UserEntity findUserProfileByJwt(String jwt);
-    UserEntity findUserByEmail(String email);
+    UserDTO findUserProfileByJwt(String jwt);
+    UserDTO findUserByEmail(String email);
 }

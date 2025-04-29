@@ -1,6 +1,6 @@
 package com.manudev.userService.mapper;
 
-import com.manudev.userService.dto.UserDTO;
+import com.manudev.common.dto.UserDTO;
 import com.manudev.userService.model.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
