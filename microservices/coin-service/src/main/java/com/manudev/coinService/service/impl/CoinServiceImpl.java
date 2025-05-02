@@ -2,10 +2,12 @@ package com.manudev.coinService.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.manudev.coinService.mapper.CoinMapper;
 import com.manudev.coinService.repository.CoinRepository;
 import com.manudev.coinService.model.Coin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manudev.coinService.service.CoinService;
+import com.manudev.common.dto.CoinDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CoinServiceImpl implements CoinService {
@@ -25,24 +28,27 @@ public class CoinServiceImpl implements CoinService {
     private CoinRepository coinRepository;
 
     @Autowired
+    private CoinMapper coinMapper;
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Override
-    public List<Coin> getCoinList(int page) throws Exception {
+    public List<CoinDTO> getCoinList(int page) throws Exception {
         String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page="+page;
 
         try {
             HttpHeaders headers = new HttpHeaders();
-
             HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
-            return objectMapper.readValue(response.getBody(), new TypeReference<List<Coin>>() {
+            List<Coin> coins = objectMapper.readValue(response.getBody(), new TypeReference<List<Coin>>() {
             });
+            return coins.stream()
+                    .map(coinMapper::coinToDTO)
+                    .collect(Collectors.toList());
         }catch (HttpClientErrorException | HttpServerErrorException e){
             throw new Exception(e.getMessage());
         }
@@ -66,7 +72,7 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public String getCoinDetails(String coinId) throws Exception {
+    public CoinDTO getCoinDetails(String coinId) throws Exception {
         String url = "https://api.coingecko.com/api/v3/coins/" + coinId;
 
         try {
@@ -86,32 +92,34 @@ public class CoinServiceImpl implements CoinService {
 
             JsonNode marketData = jsonNode.get("market_data");
 
-            coin.setCurrentPrice(marketData.get("current_price").get("usd").asDouble());
-            coin.setMarketCap(marketData.get("market_cap").get("usd").asLong());
-            coin.setMarketCapRank(marketData.get("market_cap_rank").asInt());
-            coin.setTotalVolume(marketData.get("total_volume").get("usd").asInt());
-            coin.setHigh24h(marketData.get("high_24h").get("usd").asDouble());
-            coin.setLow24h(marketData.get("low_24h").get("usd").asDouble());
-            coin.setPriceChange24h(marketData.get("price_change_24h").get("usd").asDouble());
-            coin.setPriceChangePercentage24h(marketData.get("price_change_percentage_24h").get("usd").asDouble());
-            coin.setMarketCapChange24h(marketData.get("market_cap_change_24h").asInt());
-            coin.setMarketCapChangePercentage24h(marketData.get("market_cap_change_percentage_24h").asDouble());
-            coin.setTotalSupply(marketData.get("total_supply").get("usd").asDouble());
+            if(marketData != null){
+                coin.setCurrentPrice(marketData.get("current_price").get("usd").asDouble());
+                coin.setMarketCap(marketData.get("market_cap").get("usd").asLong());
+                coin.setMarketCapRank(marketData.get("market_cap_rank").asInt());
+                coin.setTotalVolume(marketData.get("total_volume").get("usd").asInt());
+                coin.setHigh24h(marketData.get("high_24h").get("usd").asDouble());
+                coin.setLow24h(marketData.get("low_24h").get("usd").asDouble());
+                coin.setPriceChange24h(marketData.get("price_change_24h").get("usd").asDouble());
+                coin.setPriceChangePercentage24h(marketData.get("price_change_percentage_24h").get("usd").asDouble());
+                coin.setMarketCapChange24h(marketData.get("market_cap_change_24h").asInt());
+                coin.setMarketCapChangePercentage24h(marketData.get("market_cap_change_percentage_24h").asDouble());
+                coin.setTotalSupply(marketData.get("total_supply").get("usd").asDouble());
+            }
 
             coinRepository.save(coin);
-            return response.getBody();
+            return coinMapper.coinToDTO(coin);
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             throw new Exception(e.getMessage());
         }
     }
 
     @Override
-    public Coin findById(String coinId) throws Exception {
+    public CoinDTO findById(String coinId) throws Exception {
         Optional<Coin> optionalCoin = coinRepository.findById(coinId);
 
         if(optionalCoin.isEmpty()) throw new Exception("Coin not found") {};
 
-        return optionalCoin.get();
+        return coinMapper.coinToDTO(optionalCoin.get());
     }
 
     @Override
