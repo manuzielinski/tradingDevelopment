@@ -2,8 +2,8 @@ package com.manudev.coinService.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manudev.coinService.model.Coin;
 import com.manudev.coinService.service.CoinService;
+import com.manudev.common.dto.CoinDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ public class coinController {
     private ObjectMapper objectMapper;
 
     @GetMapping
-    ResponseEntity<List<Coin>> getCoinList(@RequestParam("page") int page) throws Exception {
-        List<Coin> coins = coinService.getCoinList(page);
+    ResponseEntity<List<CoinDTO>> getCoinList(@RequestParam("page") int page) throws Exception {
+        List<CoinDTO> coins = coinService.getCoinList(page);
         return new ResponseEntity<>(coins, HttpStatus.ACCEPTED);
     }
 
@@ -59,7 +59,7 @@ public class coinController {
 
     @GetMapping("/treading")
     ResponseEntity<JsonNode> getTreadingCoins() throws Exception {
-        String coin = coinService.getTreadingCoins();
+        String coin = coinService.getTrendingCoins();
         JsonNode jsonNode = objectMapper.readTree(coin);
         return new ResponseEntity<>(jsonNode, HttpStatus.ACCEPTED);
     }

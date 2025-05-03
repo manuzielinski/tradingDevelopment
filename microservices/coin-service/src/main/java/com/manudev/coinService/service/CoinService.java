@@ -11,5 +11,5 @@ public interface CoinService {
     CoinDTO findById(String coinId) throws Exception;
     String searchCoin(String keyword) throws Exception;
     String getTop50CoinsByMarketCapRank() throws Exception;
-    String getTreadingCoins() throws Exception;
+    String getTrendingCoins() throws Exception;
 }
