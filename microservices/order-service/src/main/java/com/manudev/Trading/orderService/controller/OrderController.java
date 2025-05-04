@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.manudev.common.dto.UserDTO;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,11 +18,17 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private UserService userService;
+    private final RestTemplate restTemplate;
 
-    @Autowired
-    private CoinService coinService;
+    public OrderController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+  //  @Autowired
+ //   private UserService userService;
+
+//    @Autowired
+//    private CoinService coinService;
 
 //     @Autowired
 //    private WalletTransactionService walletTransactionService;
