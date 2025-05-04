@@ -27,6 +27,7 @@
 		<module>microservices/coin-service</module>
 		<module>microservices/order-service</module>
 		<module>microservices/wallet-service</module>
+		<module>microservices/eureka-server</module>
 	</modules>
 	<scm>
 		<connection/>
