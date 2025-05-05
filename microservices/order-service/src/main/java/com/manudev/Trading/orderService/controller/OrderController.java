@@ -1,8 +1,11 @@
 package com.manudev.Trading.orderService.controller;
 
+import com.manudev.Trading.orderService.client.CoinClient;
+import com.manudev.Trading.orderService.client.UserClient;
 import com.manudev.Trading.orderService.service.OrderService;
 import com.manudev.Trading.orderService.model.CreateOrderRequest;
 import com.manudev.Trading.orderService.model.Order;
+import com.manudev.common.dto.CoinDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,31 +27,29 @@ public class OrderController {
         this.restTemplate = restTemplate;
     }
 
-  //  @Autowired
- //   private UserService userService;
+    @Autowired
+    private CoinClient coinClient;
 
-//    @Autowired
-//    private CoinService coinService;
-
-//     @Autowired
-//    private WalletTransactionService walletTransactionService;
+    @Autowired
+    private UserClient userClient;
 
     @PostMapping("/pay")
     public ResponseEntity<Order> payOrderPayment(@RequestHeader("Authorization") String jwt, @RequestBody CreateOrderRequest req)throws Exception{
 
-        UserDTO userDTO = userService.findUserProfileByJwt(jwt);
-        UserEntity userEntity = userMapper.dtoToUser(userDTO);
+        // obtener datos del user desde su microservicio usando Feign
+        UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
 
-        Coin coin = coinService.findById(req.getCoinId());
+        // obtener datos de la coin desde su mc usando feign
+        CoinDTO coinDTO = coinClient.findById(req.getCoinId());
 
-        Order order = orderService.processOrder(coin,req.getQuantity(), req.getOrderType(), userEntity);
+        Order order = orderService.processOrder(coinDTO,req.getQuantity(), req.getOrderType(), userDTO);
         return ResponseEntity.ok(order);
     }
 
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrderById(@RequestHeader("Authorization") String jwt, @PathVariable Long orderId) throws Exception {
 
-        UserDTO userDTO = userService.findUserProfileByJwt(jwt);
+        UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
 
         Order order = orderService.getOrderByID(orderId);
         if (order.getUser().getUserID().equals(userDTO.getUserID())){

@@ -7,7 +7,6 @@ import com.manudev.Trading.orderService.model.OrderItem;
 import com.manudev.Trading.orderService.repository.OrderItemRepository;
 import com.manudev.Trading.orderService.repository.OrderRepository;
 import com.manudev.Trading.orderService.service.OrderService;
-import com.manudev.Trading.orderService.service.UserClient;
 import com.manudev.common.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
