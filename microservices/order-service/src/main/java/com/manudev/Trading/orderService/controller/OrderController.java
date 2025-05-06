@@ -2,6 +2,7 @@ package com.manudev.Trading.orderService.controller;
 
 import com.manudev.Trading.orderService.client.CoinClient;
 import com.manudev.Trading.orderService.client.UserClient;
+import com.manudev.Trading.orderService.domain.OrderType;
 import com.manudev.Trading.orderService.service.OrderService;
 import com.manudev.Trading.orderService.model.CreateOrderRequest;
 import com.manudev.Trading.orderService.model.Order;
@@ -20,12 +21,6 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-
-    private final RestTemplate restTemplate;
-
-    public OrderController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     @Autowired
     private CoinClient coinClient;
@@ -52,7 +47,7 @@ public class OrderController {
         UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
 
         Order order = orderService.getOrderByID(orderId);
-        if (order.getUser().getUserID().equals(userDTO.getUserID())){
+        if (order.getUserId().equals(userDTO.getUserID())){
             return ResponseEntity.ok(order);
         }else{
             throw new Exception("you don't have access");
@@ -67,10 +62,8 @@ public class OrderController {
             throw new Exception("Missing token...");
         }
 
-        UserDTO userDTO = userService.findUserProfileByJwt(jwt);
-        UserEntity userEntity = userMapper.dtoToUser(userDTO);
-
-        List<Order> userOrders = orderService.getAllOrdersOfUser(userEntity.getUserID(), order_type, asset_symbol);
+        UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
+        List<Order> userOrders = orderService.getAllOrdersOfUser(userDTO.getUserID(), order_type, asset_symbol);
         return ResponseEntity.ok(userOrders);
     }
 }

@@ -13,9 +13,8 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long walletId;
 
-    private Long userId; // ACA TRAEMOS EL DTO DEL MICROSERVICIO DESPUES!
+    private Long userId; // Mapped to UserDTO
 
-    // en este punto se utiliza bid decimal debido a que se necesita una presicion absoluta
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
 }

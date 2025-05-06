@@ -1,5 +1,6 @@
 package com.manudev.walletService.service;
 
+import com.manudev.common.dto.UserDTO;
 import com.manudev.walletService.model.Wallet;
 
 public interface WalletService {

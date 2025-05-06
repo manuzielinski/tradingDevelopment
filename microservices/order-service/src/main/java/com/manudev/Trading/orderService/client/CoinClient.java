@@ -27,4 +27,7 @@ public interface CoinClient {
 
     @GetMapping("/coins/treading")
     JsonNode getTreadingCoins();
+
+    @GetMapping("/coins/{coinId}/raw")
+    CoinDTO findById(@PathVariable("coinId") String coinId);
 }

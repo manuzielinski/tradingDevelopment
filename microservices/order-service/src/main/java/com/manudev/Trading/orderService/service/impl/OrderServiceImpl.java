@@ -1,5 +1,6 @@
 package com.manudev.Trading.orderService.service.impl;
 
+import com.manudev.Trading.orderService.client.UserClient;
 import com.manudev.Trading.orderService.domain.OrderStatus;
 import com.manudev.Trading.orderService.domain.OrderType;
 import com.manudev.Trading.orderService.model.Order;
@@ -7,10 +8,15 @@ import com.manudev.Trading.orderService.model.OrderItem;
 import com.manudev.Trading.orderService.repository.OrderItemRepository;
 import com.manudev.Trading.orderService.repository.OrderRepository;
 import com.manudev.Trading.orderService.service.OrderService;
+import com.manudev.common.dto.CoinDTO;
 import com.manudev.common.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,20 +25,22 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final UserClient userClient;
+    @Autowired
+    private UserClient userClient;
 
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private WalletService walletService;
+//  @Autowired
+//  private WalletService walletService;
 
     @Autowired
-    private OrderItemRepository orderItemRepository;
+    private OrderItemRepository orderItemRepository;@GetMapping("/api/wallet")
+    public ResponseEntity<Wallet> getUserWallet(@RequestHeader("Authorization") String jwt){
+        UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
+        Wallet wallet = walletService.getUserWallet(userDTO);
 
-    @Autowired
-    public OrderServiceImpl(UserClient userClient) {
-        this.userClient = userClient;
+        return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);
     }
 
     @Override
@@ -55,9 +63,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(orderId).orElseThrow(() -> new Exception("Order not found"));
     }
 
-    public OrderItem createOrderItem(Coin coin, double quantity, double buyPrice, double sellPrice) {
+    public OrderItem createOrderItem(CoinDTO coinDTO, double quantity, double buyPrice, double sellPrice) {
         OrderItem orderItem = new OrderItem();
-        orderItem.setCoin(coin);
+        orderItem.setCoin(coinDTO);
         orderItem.setQuantity(quantity);
         orderItem.setBuyPrice(buyPrice);
         orderItem.setSellPrice(sellPrice);
@@ -65,13 +73,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public Order buyAsset(Coin coin, double quantity, UserDTO userDTO) throws Exception {
+    public Order buyAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO) throws Exception {
         if(quantity <= 0){
             throw new Exception("quantity should be > 0");
         }
-        double buyPrice = coin.getCurrentPrice();
+        double buyPrice = coinDTO.getCurrentPrice();
 
-        OrderItem orderItem = createOrderItem(coin,quantity,buyPrice,0);
+        OrderItem orderItem = createOrderItem(coinDTO,quantity,buyPrice,0);
         Order order = createOrder(userDTO, orderItem, OrderType.BUY);
         orderItem.setOrder(order);
 
@@ -87,14 +95,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public Order sellAsset(Coin coin, double quantity, UserDTO userDTO) throws Exception {
+    public Order sellAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO) throws Exception {
         if(quantity <= 0){
             throw new Exception("quantity should be > 0");
         }
         double sellPrice = coin.getCurrentPrice();
         double buyPrice = assetToSell.getPrice();
 
-        OrderItem orderItem = createOrderItem(coin,quantity,buyPrice,sellPrice);
+        OrderItem orderItem = createOrderItem(coinDTO,quantity,buyPrice,sellPrice);
         Order order = createOrder(userDTO, orderItem, OrderType.SELL);
         orderItem.setOrder(order);
 
@@ -124,16 +132,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order processOrder(Coin coin, double quantity, OrderType orderType, UserDTO userDTO) throws Exception {
+    public Order processOrder(CoinDTO coinDTO, double quantity, OrderType orderType, UserDTO userDTO) throws Exception {
         if (orderType == null) {
             throw new IllegalArgumentException("Order type must not be null");
         }
 
         switch (orderType) {
             case BUY:
-                return buyAsset(coin, quantity, userDTO);
+                return buyAsset(coinDTO, quantity, userDTO);
             case SELL:
-                return sellAsset(coin, quantity, userDTO);
+                return sellAsset(coinDTO, quantity, userDTO);
             default:
                 throw new IllegalArgumentException("Invalid order type:" + orderType);
         }

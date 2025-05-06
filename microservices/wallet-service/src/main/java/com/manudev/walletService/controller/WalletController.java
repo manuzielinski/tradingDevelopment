@@ -1,5 +1,6 @@
 package com.manudev.walletService.controller;
 
+import com.manudev.common.dto.UserDTO;
 import com.manudev.walletService.model.Wallet;
 import com.manudev.walletService.model.WalletTransaction;
 import com.manudev.walletService.service.WalletService;
@@ -12,16 +13,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/wallet")
 public class WalletController {
 
-
     @Autowired
     private WalletService walletService;
 
-    @Autowired
-    private OrderService orderService;
+//    @Autowired
+//    private OrderService orderService;
 
     @GetMapping("/api/wallet")
     public ResponseEntity<Wallet> getUserWallet(@RequestHeader("Authorization") String jwt){
-        UserDTO userDTO = userService.findUserProfileByJwt(jwt);
+
+        UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
+
         Wallet wallet = walletService.getUserWallet(userDTO);
 
         return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);

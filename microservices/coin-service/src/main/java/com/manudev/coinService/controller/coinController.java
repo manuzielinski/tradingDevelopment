@@ -65,4 +65,11 @@ public class coinController {
         return new ResponseEntity<>(jsonNode, HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/{coinId}/raw")
+    public ResponseEntity<CoinDTO> findById(@PathVariable String coinId) throws Exception {
+        CoinDTO coinDTO = coinService.findById(coinId);
+        return new ResponseEntity<>(coinDTO, HttpStatus.OK);
+    }
+
+
 }
