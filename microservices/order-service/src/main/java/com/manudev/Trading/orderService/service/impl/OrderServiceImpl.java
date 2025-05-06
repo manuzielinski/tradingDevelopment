@@ -1,6 +1,7 @@
 package com.manudev.Trading.orderService.service.impl;
 
 import com.manudev.Trading.orderService.client.UserClient;
+import com.manudev.Trading.orderService.client.WalletClient;
 import com.manudev.Trading.orderService.domain.OrderStatus;
 import com.manudev.Trading.orderService.domain.OrderType;
 import com.manudev.Trading.orderService.model.Order;
@@ -10,6 +11,7 @@ import com.manudev.Trading.orderService.repository.OrderRepository;
 import com.manudev.Trading.orderService.service.OrderService;
 import com.manudev.common.dto.CoinDTO;
 import com.manudev.common.dto.UserDTO;
+import com.manudev.common.dto.WalletDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,16 +33,16 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-//  @Autowired
-//  private WalletService walletService;
+    @Autowired
+    private WalletClient walletClient;
 
     @Autowired
     private OrderItemRepository orderItemRepository;@GetMapping("/api/wallet")
-    public ResponseEntity<Wallet> getUserWallet(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<WalletDTO> getUserWallet(@RequestHeader("Authorization") String jwt){
         UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
-        Wallet wallet = walletService.getUserWallet(userDTO);
+        WalletDTO walletDTO = walletClient.getUserWallet(userDTO);
 
-        return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(walletDTO, HttpStatus.ACCEPTED);
     }
 
     @Override

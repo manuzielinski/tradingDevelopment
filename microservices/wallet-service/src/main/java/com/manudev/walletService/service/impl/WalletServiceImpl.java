@@ -1,11 +1,10 @@
 package com.manudev.walletService.service.impl;
 
-import com.manudev.Trading.userService.model.UserEntity;
-import com.manudev.Trading.OrderService.domain.OrderType;
-import com.manudev.Trading.OrderService.model.Order;
-import com.manudev.Trading.walletService.model.Wallet;
-import com.manudev.Trading.walletService.repository.WalletRepository;
-import com.manudev.Trading.walletService.service.WalletService;
+
+import com.manudev.common.dto.UserDTO;
+import com.manudev.walletService.model.Wallet;
+import com.manudev.walletService.repository.WalletRepository;
+import com.manudev.walletService.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +14,16 @@ import java.util.Optional;
 @Service
 public class WalletServiceImpl implements WalletService {
 
-
     @Autowired
     private WalletRepository walletRepository;
+
     @Override
-    public Wallet getUserWallet(UserEntity user) {
-        Wallet wallet = walletRepository.findWalletByUserId(user.getUserID());
+    public Wallet getUserWallet(UserDTO userDTO) {
+        Wallet wallet = walletRepository.findWalletByUserId(userDTO.getUserID());
 
         if(wallet==null) {
             wallet = new Wallet();
-            wallet.setUser(user);
+            wallet.setUser(userDTO);
         }
         return wallet;
     }
@@ -52,7 +51,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet WalletToWalletTransfer(UserEntity sender, Wallet receiver, Long amount) throws Exception {
+    public Wallet WalletToWalletTransfer(UserDTO sender, Wallet receiver, Long amount) throws Exception {
         Wallet senderWallet = getUserWallet(sender);
 
         if (senderWallet.getBalance().compareTo(BigDecimal.valueOf(amount))<0){
@@ -70,8 +69,8 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet payOrderPayment(Order order, UserEntity user) throws Exception {
-        Wallet wallet = getUserWallet(user);
+    public Wallet payOrderPayment(OrderDTO orderDTO, UserDTO userDTO) throws Exception {
+        Wallet wallet = getUserWallet(userDTO);
 
         if(order.getOrderType().equals(OrderType.BUY)){
             BigDecimal newBalance = wallet.getBalance().subtract(order.getPrice());
