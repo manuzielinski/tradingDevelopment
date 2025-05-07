@@ -2,7 +2,7 @@ package com.manudev.Trading.orderService.controller;
 
 import com.manudev.Trading.orderService.client.CoinClient;
 import com.manudev.Trading.orderService.client.UserClient;
-import com.manudev.Trading.orderService.domain.OrderType;
+import com.manudev.common.enums.OrderType;
 import com.manudev.Trading.orderService.service.OrderService;
 import com.manudev.Trading.orderService.model.CreateOrderRequest;
 import com.manudev.Trading.orderService.model.Order;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.manudev.common.dto.UserDTO;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.manudev.Trading.orderService.model;
 
-import com.manudev.Trading.orderService.domain.OrderType;
+import com.manudev.common.enums.OrderType;
 import lombok.Data;
 
 @Data

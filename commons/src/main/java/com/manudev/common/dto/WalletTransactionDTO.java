@@ -1,5 +1,6 @@
 package com.manudev.common.dto;
 
+import com.manudev.common.enums.WalletTransactionTypeDTO;
 import lombok.Data;
 
 import java.time.LocalDate;

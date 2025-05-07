@@ -1,4 +1,4 @@
-package com.manudev.Trading.orderService.domain;
+package com.manudev.common.enums;
 
 public enum OrderStatus {
     PENDING,

@@ -1,4 +1,4 @@
-package com.manudev.common.dto;
+package com.manudev.common.enums;
 
 public enum WalletTransactionTypeDTO {
     WITHDRAWAL,

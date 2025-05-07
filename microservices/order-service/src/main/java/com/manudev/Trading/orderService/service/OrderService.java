@@ -1,6 +1,6 @@
 package com.manudev.Trading.orderService.service;
 
-import com.manudev.Trading.orderService.domain.OrderType;
+import com.manudev.common.enums.OrderType;
 import com.manudev.Trading.orderService.model.Order;
 import com.manudev.Trading.orderService.model.OrderItem;
 import com.manudev.common.dto.CoinDTO;

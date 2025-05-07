@@ -1,7 +1,7 @@
 package com.manudev.Trading.orderService.model;
 
-import com.manudev.Trading.orderService.domain.OrderStatus;
-import com.manudev.Trading.orderService.domain.OrderType;
+import com.manudev.common.enums.OrderStatus;
+import com.manudev.common.enums.OrderType;
 import com.manudev.common.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.Data;

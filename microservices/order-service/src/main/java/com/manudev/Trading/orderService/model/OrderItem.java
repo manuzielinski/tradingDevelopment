@@ -1,6 +1,7 @@
 package com.manudev.Trading.orderService.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.manudev.common.dto.CoinDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class OrderItem {
     private double quantity;
 
     @ManyToOne
-    private Coin coin;
+    private CoinDTO coinDTO;
 
     private double buyPrice;
 

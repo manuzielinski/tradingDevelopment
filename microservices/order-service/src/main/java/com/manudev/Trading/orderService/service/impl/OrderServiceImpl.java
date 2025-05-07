@@ -2,8 +2,8 @@ package com.manudev.Trading.orderService.service.impl;
 
 import com.manudev.Trading.orderService.client.UserClient;
 import com.manudev.Trading.orderService.client.WalletClient;
-import com.manudev.Trading.orderService.domain.OrderStatus;
-import com.manudev.Trading.orderService.domain.OrderType;
+import com.manudev.common.enums.OrderStatus;
+import com.manudev.common.enums.OrderType;
 import com.manudev.Trading.orderService.model.Order;
 import com.manudev.Trading.orderService.model.OrderItem;
 import com.manudev.Trading.orderService.repository.OrderItemRepository;
