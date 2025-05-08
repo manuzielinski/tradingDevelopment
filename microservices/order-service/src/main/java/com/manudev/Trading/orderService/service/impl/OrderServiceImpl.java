@@ -28,6 +28,9 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
+    private OrderItemRepository orderItemRepository;
+
+    @Autowired
     private UserClient userClient;
 
     @Autowired
@@ -36,18 +39,18 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private WalletClient walletClient;
 
-    @Autowired
-    private OrderItemRepository orderItemRepository;@GetMapping("/api/wallet")
-    public ResponseEntity<WalletDTO> getUserWallet(@RequestHeader("Authorization") String jwt){
+    @GetMapping("/api/wallet")
+    public ResponseEntity<WalletDTO> getUserWallet(@RequestHeader("Authorization") String jwt) {
         UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
-        WalletDTO walletDTO = walletClient.getUserWallet(userDTO);
+        WalletDTO walletDTO = walletClient.getUserWallet(jwt).getBody();
 
         return new ResponseEntity<>(walletDTO, HttpStatus.ACCEPTED);
     }
 
+
     @Override
     public Order createOrder(UserDTO userDTO, OrderItem orderItem, OrderType orderType) {
-        double price = orderItem.getCoin().getCurrentPrice()*orderItem.getQuantity();
+        double price = orderItem.getCoinDTO().getCurrentPrice()*orderItem.getQuantity();
 
         Order order = new Order();
         order.setUserDTO(userDTO);
@@ -67,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
 
     public OrderItem createOrderItem(CoinDTO coinDTO, double quantity, double buyPrice, double sellPrice) {
         OrderItem orderItem = new OrderItem();
-        orderItem.setCoin(coinDTO);
+        orderItem.setCoinDTO(coinDTO);
         orderItem.setQuantity(quantity);
         orderItem.setBuyPrice(buyPrice);
         orderItem.setSellPrice(sellPrice);
@@ -75,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public Order buyAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO) throws Exception {
+    public Order buyAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO, String jwt) throws Exception {
         if(quantity <= 0){
             throw new Exception("quantity should be > 0");
         }
@@ -85,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = createOrder(userDTO, orderItem, OrderType.BUY);
         orderItem.setOrder(order);
 
-        walletService.payOrderPayment(order, userDTO);
+        walletClient.payOrderPayment(jwt, order.getOrderId());
 
         order.setOrderStatus(OrderStatus.SUCCESS);
         order.setOrderType(OrderType.BUY);
@@ -97,11 +100,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public Order sellAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO) throws Exception {
+    public Order sellAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO, String jwt) throws Exception {
         if(quantity <= 0){
             throw new Exception("quantity should be > 0");
         }
-        double sellPrice = coin.getCurrentPrice();
+        double sellPrice = coinDTO.getCurrentPrice();
         double buyPrice = assetToSell.getPrice();
 
         OrderItem orderItem = createOrderItem(coinDTO,quantity,buyPrice,sellPrice);
@@ -112,10 +115,10 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus(OrderStatus.SUCCESS);
             order.setOrderType(OrderType.SELL);
             Order savedOrder = orderRepository.save(order);
-            walletService.payOrderPayment(order, userDTO);
+            walletClient.payOrderPayment(jwt, userDTO.getUserID());
 
             Asset updatedAsset = assetService.updateAsset(assetToSell.getId(),-quantity);
-            if(updatedAsset.getQuantity()*coin.getCurrentPrice()<=1){
+            if(updatedAsset.getQuantity()*coinDTO.getCurrentPrice()<=1){
                 assetService.deleteAsset(updatedAsset.getId());
             }
             return savedOrder;

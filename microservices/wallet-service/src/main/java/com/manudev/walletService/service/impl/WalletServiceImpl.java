@@ -23,7 +23,7 @@ public class WalletServiceImpl implements WalletService {
 
         if(wallet==null) {
             wallet = new Wallet();
-            wallet.setUser(userDTO);
+            wallet.setUserDTO(userDTO);
         }
         return wallet;
     }
