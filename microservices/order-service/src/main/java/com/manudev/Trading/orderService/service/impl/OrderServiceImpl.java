@@ -117,9 +117,9 @@ public class OrderServiceImpl implements OrderService {
             Order savedOrder = orderRepository.save(order);
             walletClient.payOrderPayment(jwt, userDTO.getUserID());
 
-            Asset updatedAsset = assetService.updateAsset(assetToSell.getId(),-quantity);
+            AssetDTO updatedAsset = assetClient.updateAsset(assetToSell.getId(),-quantity);
             if(updatedAsset.getQuantity()*coinDTO.getCurrentPrice()<=1){
-                assetService.deleteAsset(updatedAsset.getId());
+                assetClient.deleteAsset(updatedAsset.getId());
             }
             return savedOrder;
         }

@@ -1,7 +1,5 @@
 package com.manudev.walletService.model;
 
-
-import com.manudev.common.dto.CoinDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,10 +14,10 @@ public class Asset {
     private double quantity;
     private double buyPrice;
 
-    @ManyToOne
-    private CoinDTO coinDTO;
+    // Solo almacenas el ID de la moneda (Coin) relacionada
+    @Column(name = "coin_id")
+    private String coinId;
 
     @Column(name = "user_id")
-    private Long userId;    // ACA PONER EL DTO NUEVO QUE SE COMPARTE ENTRE LOS MS
-
+    private Long userId;
 }

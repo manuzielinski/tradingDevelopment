@@ -8,4 +8,6 @@ public class WalletDTO {
     private Long walletId;
     private Long userId;
     private BigDecimal balance;
+    private UserDTO userDTO;
 }
+

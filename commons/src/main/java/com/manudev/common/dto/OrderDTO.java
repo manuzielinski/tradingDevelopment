@@ -15,5 +15,5 @@ public class OrderDTO {
     private BigDecimal price;
     private LocalDateTime timestamp;
     private OrderStatus orderStatus;
-    private OrderItemDTO orderItem; // CREARLO
+    private OrderItemDTO orderItem;
 }

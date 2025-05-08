@@ -1,7 +1,9 @@
 package com.manudev.walletService.service.impl;
 
 
+import com.manudev.common.dto.OrderDTO;
 import com.manudev.common.dto.UserDTO;
+import com.manudev.common.enums.OrderType;
 import com.manudev.walletService.model.Wallet;
 import com.manudev.walletService.repository.WalletRepository;
 import com.manudev.walletService.service.WalletService;
@@ -23,7 +25,7 @@ public class WalletServiceImpl implements WalletService {
 
         if(wallet==null) {
             wallet = new Wallet();
-            wallet.setUserDTO(userDTO);
+            wallet.setUserId(userDTO.getUserID());
         }
         return wallet;
     }
@@ -72,14 +74,14 @@ public class WalletServiceImpl implements WalletService {
     public Wallet payOrderPayment(OrderDTO orderDTO, UserDTO userDTO) throws Exception {
         Wallet wallet = getUserWallet(userDTO);
 
-        if(order.getOrderType().equals(OrderType.BUY)){
-            BigDecimal newBalance = wallet.getBalance().subtract(order.getPrice());
-            if(newBalance.compareTo(order.getPrice())<0){
+        if(orderDTO.getOrderType().equals(OrderType.BUY)){
+            BigDecimal newBalance = wallet.getBalance().subtract(orderDTO.getPrice());
+            if(newBalance.compareTo(orderDTO.getPrice())<0){
                 throw new Exception("Insufficient funds for this transaction");
             }
             wallet.setBalance(newBalance);
         } else {
-            BigDecimal newBalance = wallet.getBalance().add(order.getPrice());
+            BigDecimal newBalance = wallet.getBalance().add(orderDTO.getPrice());
             wallet.setBalance(newBalance);
         }
         walletRepository.save(wallet);
