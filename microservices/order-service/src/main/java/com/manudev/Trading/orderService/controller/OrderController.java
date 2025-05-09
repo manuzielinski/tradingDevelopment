@@ -36,7 +36,7 @@ public class OrderController {
         // obtener datos de la coin desde su mc usando feign
         CoinDTO coinDTO = coinClient.findById(req.getCoinId());
 
-        Order order = orderService.processOrder(coinDTO,req.getQuantity(), req.getOrderType(), userDTO);
+        Order order = orderService.processOrder(coinDTO,req.getQuantity(), req.getOrderType(), userDTO, jwt);
         return ResponseEntity.ok(order);
     }
 

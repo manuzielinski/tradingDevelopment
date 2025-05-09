@@ -12,6 +12,6 @@ public interface OrderService {
     Order createOrder(UserDTO userDTO, OrderItem orderItem, OrderType orderType);
     Order getOrderByID(Long orderId) throws Exception;
     List<Order> getAllOrdersOfUser(Long userId, OrderType orderType, String asset_symbol);
-    Order processOrder(CoinDTO coinDTO, double quantity, OrderType orderType, UserDTO userDTO) throws Exception;
-    Order buyAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO) throws Exception;
+    Order processOrder(CoinDTO coinDTO, double quantity, OrderType orderType, UserDTO userDTO, String jwt) throws Exception;
+    Order buyAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO, String jwt) throws Exception;
 }

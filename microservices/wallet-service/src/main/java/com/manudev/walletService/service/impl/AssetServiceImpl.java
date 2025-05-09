@@ -43,24 +43,26 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public List<AssetDTO> getUsersAssets(Long userId) {
-        return assetMapper.assetToDTO(assetRepository.findByUserId(userId));
+        List<Asset>  assets  = assetRepository.findByUserId(userId);
+        return assetMapper.assetListToDTO(assets);
     }
 
     @Override
-    public Asset updateAsset(Long assetId, double quantity) {
+    public AssetDTO updateAsset(Long assetId, double quantity) {
 
-        Asset oldAsset = getAssetById(assetId);
+        Asset oldAsset = assetMapper.dtoToAsset(getAssetById(assetId));
         oldAsset.setQuantity(quantity+oldAsset.getQuantity());
-        return assetRepository.save(oldAsset);
+        return assetMapper.assetToDTO(assetRepository.save(oldAsset));
     }
 
     @Override
-    public Asset findAssetByUserIdAndCoinId(Long userId, String coinId) {
-        return assetRepository.findByUserIdAndCoinId(userId,coinId);
+    public AssetDTO findAssetByUserIdAndCoinId(Long userId, String coinId) {
+        return assetMapper.assetToDTO(assetRepository.findByUserIdAndCoinId(userId,coinId));
     }
 
     @Override
-    public void deleteAsset(Long assetId) {
+    public String deleteAsset(Long assetId) {
         assetRepository.deleteById(assetId);
+        return "Asset deleted: " + assetId;
     }
 }

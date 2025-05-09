@@ -1,7 +1,9 @@
 package com.manudev.Trading.orderService.service.impl;
 
+import com.manudev.Trading.orderService.client.AssetClient;
 import com.manudev.Trading.orderService.client.UserClient;
 import com.manudev.Trading.orderService.client.WalletClient;
+import com.manudev.common.dto.AssetDTO;
 import com.manudev.common.enums.OrderStatus;
 import com.manudev.common.enums.OrderType;
 import com.manudev.Trading.orderService.model.Order;
@@ -38,6 +40,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private WalletClient walletClient;
+
+    @Autowired
+    private AssetClient assetClient;
 
     @GetMapping("/api/wallet")
     public ResponseEntity<WalletDTO> getUserWallet(@RequestHeader("Authorization") String jwt) {
@@ -94,7 +99,15 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderType(OrderType.BUY);
         Order savedOrder = orderRepository.save(order);
 
-        // create asset
+        // creamos el asset
+        AssetDTO oldAsset = assetClient.getAssetByUserIdAndCoinId(
+                order.getOrderItem().getCoinDTO().getId(),
+                jwt
+        ).getBody();
+
+        if(oldAsset == null){
+            assetClient.
+        }
 
         return savedOrder;
     }
@@ -137,16 +150,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order processOrder(CoinDTO coinDTO, double quantity, OrderType orderType, UserDTO userDTO) throws Exception {
+    public Order processOrder(CoinDTO coinDTO, double quantity, OrderType orderType, UserDTO userDTO, String jwt) throws Exception {
         if (orderType == null) {
             throw new IllegalArgumentException("Order type must not be null");
         }
 
         switch (orderType) {
             case BUY:
-                return buyAsset(coinDTO, quantity, userDTO);
+                return buyAsset(coinDTO, quantity, userDTO, jwt);
             case SELL:
-                return sellAsset(coinDTO, quantity, userDTO);
+                return sellAsset(coinDTO, quantity, userDTO, jwt);
             default:
                 throw new IllegalArgumentException("Invalid order type:" + orderType);
         }
