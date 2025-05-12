@@ -1,6 +1,7 @@
 package com.manudev.walletService.controller;
 
 import com.manudev.common.dto.AssetDTO;
+import com.manudev.common.dto.CreateAssetRequest;
 import com.manudev.common.dto.UserDTO;
 import com.manudev.walletService.client.UserClient;
 import com.manudev.walletService.service.AssetService;
@@ -30,10 +31,9 @@ public class AssetController {
         return ResponseEntity.ok().body(assetDTO);
     }
 
-    @GetMapping("/coin/{coinId}/user")
-    public ResponseEntity<AssetDTO> getAssetByUserIdAndCoinId(@PathVariable String coinId, @RequestHeader("Authorization") String jwt) throws Exception {
-        UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
-        AssetDTO assetDTO = assetService.findAssetByUserIdAndCoinId(userDTO.getUserID(), coinId);
+    @GetMapping("/user/{userId}/coin/{coinId}")
+    public ResponseEntity<AssetDTO> getAssetByUserIdAndCoinId(@PathVariable Long userId, @PathVariable String coinId) {
+        AssetDTO assetDTO = assetService.findAssetByUserIdAndCoinId(userId, coinId);
         return ResponseEntity.ok().body(assetDTO);
     }
 
@@ -43,4 +43,28 @@ public class AssetController {
         List<AssetDTO> assets = assetService.getUsersAssets(userDTO.getUserID());
         return ResponseEntity.ok().body(assets);
     }
+
+    @PostMapping
+    public ResponseEntity<AssetDTO> createAsset(@RequestBody CreateAssetRequest request) {
+        AssetDTO assetDTO = assetService.createAsset(
+                request.getUserDTO(),
+                request.getCoinDTO(),
+                request.getQuantity()
+        );
+        return ResponseEntity.ok(assetDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<String> deleteAsset(@PathVariable Long assetId) {
+        assetService.deleteAsset(assetId);
+        return ResponseEntity.ok("Asset deleted Successfully");
+    }
+
+    @PutMapping("/{assetId}")
+    public AssetDTO updateAsset(@PathVariable Long assetId, @RequestParam double quantity) {
+        AssetDTO updatedAsset = assetService.updateAsset(assetId, quantity);
+        return updatedAsset;
+    }
+
+
 }

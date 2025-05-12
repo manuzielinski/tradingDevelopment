@@ -8,9 +8,11 @@ import com.manudev.walletService.model.Asset;
 import com.manudev.walletService.repository.AssetRepository;
 import com.manudev.walletService.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class AssetServiceImpl implements AssetService {
 
     @Autowired

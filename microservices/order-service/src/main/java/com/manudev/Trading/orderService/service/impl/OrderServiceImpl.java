@@ -3,7 +3,7 @@ package com.manudev.Trading.orderService.service.impl;
 import com.manudev.Trading.orderService.client.AssetClient;
 import com.manudev.Trading.orderService.client.UserClient;
 import com.manudev.Trading.orderService.client.WalletClient;
-import com.manudev.common.dto.AssetDTO;
+import com.manudev.common.dto.*;
 import com.manudev.common.enums.OrderStatus;
 import com.manudev.common.enums.OrderType;
 import com.manudev.Trading.orderService.model.Order;
@@ -11,9 +11,6 @@ import com.manudev.Trading.orderService.model.OrderItem;
 import com.manudev.Trading.orderService.repository.OrderItemRepository;
 import com.manudev.Trading.orderService.repository.OrderRepository;
 import com.manudev.Trading.orderService.service.OrderService;
-import com.manudev.common.dto.CoinDTO;
-import com.manudev.common.dto.UserDTO;
-import com.manudev.common.dto.WalletDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -100,13 +97,15 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(order);
 
         // creamos el asset
-        AssetDTO oldAsset = assetClient.getAssetByUserIdAndCoinId(
-                order.getOrderItem().getCoinDTO().getId(),
-                jwt
-        ).getBody();
+        AssetDTO oldAsset = assetClient.findAssetByUserIdAndCoinId(order.getUserId(),coinDTO.getId());
 
         if(oldAsset == null){
-            assetClient.
+            CreateAssetRequest request = new CreateAssetRequest();
+            request.setUserDTO(userDTO);
+            request.setCoinDTO(orderItem.getCoinDTO());
+            request.setQuantity(orderItem.getQuantity());
+
+            assetClient.createAsset(request);
         }
 
         return savedOrder;
@@ -114,34 +113,38 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     public Order sellAsset(CoinDTO coinDTO, double quantity, UserDTO userDTO, String jwt) throws Exception {
-        if(quantity <= 0){
+        if (quantity <= 0) {
             throw new Exception("quantity should be > 0");
         }
         double sellPrice = coinDTO.getCurrentPrice();
-        double buyPrice = assetToSell.getPrice();
 
-        OrderItem orderItem = createOrderItem(coinDTO,quantity,buyPrice,sellPrice);
+        AssetDTO assetToSell = assetClient.findAssetByUserIdAndCoinId(userDTO.getUserID(), coinDTO.getId());
+        double buyPrice = assetToSell.getBuyPrice();
+        if (assetToSell != null) {
+
+            OrderItem orderItem = createOrderItem(coinDTO, quantity, buyPrice, sellPrice);
+
         Order order = createOrder(userDTO, orderItem, OrderType.SELL);
         orderItem.setOrder(order);
 
-        if(assetToSell.getQuantity()>=quantity){
+        if (assetToSell.getQuantity() >= quantity) {
             order.setOrderStatus(OrderStatus.SUCCESS);
             order.setOrderType(OrderType.SELL);
             Order savedOrder = orderRepository.save(order);
             walletClient.payOrderPayment(jwt, userDTO.getUserID());
 
-            AssetDTO updatedAsset = assetClient.updateAsset(assetToSell.getId(),-quantity);
-            if(updatedAsset.getQuantity()*coinDTO.getCurrentPrice()<=1){
-                assetClient.deleteAsset(updatedAsset.getId());
+            AssetDTO updatedAsset = assetClient.updateAsset(assetToSell.getAssetId(), -quantity);
+
+            if (updatedAsset.getQuantity() * coinDTO.getCurrentPrice() <= 1) {
+                assetClient.deleteAsset(updatedAsset.getAssetId());
             }
             return savedOrder;
         }
         throw new Exception("Insufficient Quantity to sell");
-
-        // create asset
-
-        return savedOrder;
+        }
+        throw new Exception("Asset not found");
     }
+
 
     @Override
     public List<Order> getAllOrdersOfUser(Long userId, OrderType orderType, String asset_symbol) {
