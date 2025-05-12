@@ -16,8 +16,9 @@ public class Watchlist {
     private Long watchlistId;
 
     @OneToOne
-    private Long userId;
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
-    @ManyToMany
-    private List<CoinDTO> coins= new ArrayList<>();
+    @ElementCollection
+    private List<String> coinIds = new ArrayList<>();
 }
