@@ -1,11 +1,11 @@
 package com.manudev.paymentGatewayService.service.impl;
 
 import com.manudev.common.dto.UserDTO;
-import com.manudev.paymentGatewayService.domain.PaymentMethod;
-import com.manudev.paymentGatewayService.domain.PaymentOrderStatus;
+import com.manudev.common.enums.PaymentMethod;
+import com.manudev.common.enums.PaymentOrderStatus;
 import com.manudev.paymentGatewayService.model.PaymentOrder;
 import com.manudev.paymentGatewayService.repository.PaymentOrderRepository;
-import com.manudev.paymentGatewayService.response.PaymentResponse;
+import com.manudev.common.dto.PaymentResponse;
 import com.manudev.paymentGatewayService.service.PaymentService;
 import com.razorpay.Payment;
 import com.razorpay.PaymentLink;
@@ -78,7 +78,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentResponse createRazorpayPaymentLing(UserDTO userDTO, Long amount) {
+    public PaymentResponse createRazorpayPaymentLink(UserDTO userDTO, Long amount) {
 
         Long Amount = amount*100;
 
@@ -128,7 +128,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentResponse createStripePaymentLing(UserDTO userDTO, Long amount, Long orderId) throws StripeException {
+    public PaymentResponse createStripePaymentLink(UserDTO userDTO, Long amount, Long orderId) throws StripeException {
         Stripe.apiKey = stripeSecretKey;
 
         SessionCreateParams params = SessionCreateParams.builder()
@@ -157,7 +157,7 @@ public class PaymentServiceImpl implements PaymentService {
         System.out.println("session _____ " + session);
 
         PaymentResponse response = new PaymentResponse();
-        response.getPayment_url(session.getUrl());
+        response.setPayment_url(session.getUrl());
 
         return response;
     }

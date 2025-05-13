@@ -1,4 +1,4 @@
-package com.manudev.paymentGatewayService.response;
+package com.manudev.common.dto;
 
 import lombok.Data;
 

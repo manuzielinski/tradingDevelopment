@@ -1,4 +1,4 @@
-package com.manudev.paymentGatewayService.domain;
+package com.manudev.common.enums;
 
 public enum PaymentMethod {
     RAZORPAY,

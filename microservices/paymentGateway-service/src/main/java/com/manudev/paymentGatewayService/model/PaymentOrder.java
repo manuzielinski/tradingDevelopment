@@ -1,7 +1,7 @@
 package com.manudev.paymentGatewayService.model;
 
-import com.manudev.paymentGatewayService.domain.PaymentMethod;
-import com.manudev.paymentGatewayService.domain.PaymentOrderStatus;
+import com.manudev.common.enums.PaymentMethod;
+import com.manudev.common.enums.PaymentOrderStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
