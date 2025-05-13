@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.manudev</groupId>
 	<artifactId>Trading</artifactId>
@@ -28,6 +28,7 @@
 		<module>microservices/order-service</module>
 		<module>microservices/wallet-service</module>
 		<module>microservices/eureka-server</module>
+		<module>microservices/paymentGateway-service</module>
 	</modules>
 	<scm>
 		<connection/>

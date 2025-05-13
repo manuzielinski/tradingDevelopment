@@ -1,6 +1,7 @@
 package com.manudev.walletService.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long walletId;
 
+    @NotNull
     private Long userId; // Mapped to UserDTO
 
     private BigDecimal balance = BigDecimal.ZERO;
