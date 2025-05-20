@@ -96,7 +96,7 @@
         <!-- Commons -->
         <dependency>
             <groupId>com.manudev</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>commons1</artifactId>
             <version>${project.version}</version>
         </dependency>
 
