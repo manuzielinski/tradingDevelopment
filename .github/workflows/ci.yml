@@ -1,19 +1,17 @@
-name: Java CI Pipeline
+name: CI - Coin Service
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main", "develop" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main", "develop" ]
 
 jobs:
-  build-test-checkstyle:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up JDK 17
@@ -22,16 +20,27 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      # Simular Error 3: Falta de dependencia (descomenta para probar)
+      - name: Skip commons install (provoca error)
+        run: echo "Skipping commons install on purpose"
 
-      - name: Build and run tests
-        run: mvn clean install --batch-mode
+      # Compilar commons
+      - name: Build commons module
+        run: mvn clean install -pl microservices/commons -am
 
+      # Error 2: Linter Checkstyle
       - name: Run Checkstyle
-        run: mvn checkstyle:check -pl microservices/commons
+        run: mvn checkstyle:check
+
+      # Compilar coin-service
+      - name: Compile coin-service
+        run: mvn clean compile -pl microservices/coin-service -am
+
+      # Error 1: Test que falla
+      - name: Run tests
+        run: mvn test -pl microservices/coin-service -am
+
+
+      - name: Run tests with coverage
+        run: mvn clean verify -Pcoverage
+

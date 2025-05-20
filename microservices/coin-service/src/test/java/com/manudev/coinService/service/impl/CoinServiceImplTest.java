@@ -120,7 +120,6 @@ class CoinServiceImplTest {
         assertEquals(expectedResponse, result);
     }
 
-    /*
     @Test
     void findById_shouldReturnCoinDTO_withWrongSymbol_expectFail() throws Exception {
         // Configuramos que el repositorio devuelva la dummyCoin (que tiene símbolo "BTC")
@@ -134,6 +133,5 @@ class CoinServiceImplTest {
         assertEquals("ETH", result.getSymbol(), "El símbolo esperado es ETH, pero el mock devuelve BTC");
     }
 
-     */
 
 }

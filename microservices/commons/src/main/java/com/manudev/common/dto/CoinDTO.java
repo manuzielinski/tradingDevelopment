@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.ZonedDateTime;
 
 /**
- * Data Transfer Object representing detailed information about a coin.
+ * Data Transfer Object representing detailed information about a coin ( e intencionalmente agregue mas de 120 caracteres, creando un error que el github actions detectara).
  */
 @Data
 @AllArgsConstructor
