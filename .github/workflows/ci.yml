@@ -25,8 +25,8 @@ jobs:
         run: echo "Skipping commons install on purpose"
 
       # Compilar commons
-      - name: Build commons module
-        run: mvn clean install -pl microservices/commons -am
+        #      - name: Build commons module
+        #        run: mvn clean install -pl microservices/commons -am
 
       # Error 2: Linter Checkstyle
       - name: Run Checkstyle
