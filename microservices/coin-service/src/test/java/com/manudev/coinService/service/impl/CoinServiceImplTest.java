@@ -121,7 +121,7 @@ class CoinServiceImplTest {
     }
 
     @Test
-    void findById_shouldReturnCoinDTO_withWrongSymbol_expectFail() throws Exception {
+    void findById_shouldReturnCoinDTO_withCorrectSymbol() throws Exception {
         // Configuramos que el repositorio devuelva la dummyCoin (que tiene símbolo "BTC")
         when(coinRepository.findById("bitcoin")).thenReturn(Optional.of(dummyCoin));
         // El mapper convierte esa moneda a DTO (símbolo "BTC")
@@ -129,9 +129,10 @@ class CoinServiceImplTest {
 
         CoinDTO result = coinService.findById("bitcoin");
 
-        // Intencionalmente esperamos que el símbolo sea "ETH" pero en realidad es "BTC"
-        assertEquals("ETH", result.getSymbol(), "El símbolo esperado es ETH, pero el mock devuelve BTC");
+        // Ahora esperamos el símbolo correcto que el mock devuelve: "BTC"
+        assertEquals("BTC", result.getSymbol(), "El símbolo esperado es BTC");
     }
+
 
 
 }
