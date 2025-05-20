@@ -7,7 +7,7 @@ import com.manudev.coinService.repository.CoinRepository;
 import com.manudev.coinService.model.Coin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manudev.coinService.service.CoinService;
-import com.manudev.common.dto.CoinDTO;
+import com.manudev.coinService.model.CoinDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

@@ -91,7 +91,7 @@ public class Coin {
     private ZonedDateTime atlDate;
 
     @JsonProperty("roi")
-    private Object roi;
+    private Double roi;
 
     @JsonProperty("last_updated")
     private ZonedDateTime lastUpdated;

@@ -28,15 +28,15 @@ public class OrderController {
     private UserClient userClient;
 
     @PostMapping("/pay")
-    public ResponseEntity<Order> payOrderPayment(@RequestHeader("Authorization") String jwt, @RequestBody CreateOrderRequest req)throws Exception{
+    public ResponseEntity<Order> payOrderPayment(@RequestHeader("Authorization") String jwt, @RequestBody CreateOrderRequest createOrderRequest)throws Exception{
 
         // obtener datos del user desde su microservicio usando Feign
         UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
 
         // obtener datos de la coin desde su mc usando feign
-        CoinDTO coinDTO = coinClient.findById(req.getCoinId());
+        CoinDTO coinDTO = coinClient.findById(createOrderRequest.getCoinId());
 
-        Order order = orderService.processOrder(coinDTO,req.getQuantity(), req.getOrderType(), userDTO, jwt);
+        Order order = orderService.processOrder(coinDTO,createOrderRequest.getQuantity(), createOrderRequest.getOrderType(), userDTO, jwt);
         return ResponseEntity.ok(order);
     }
 

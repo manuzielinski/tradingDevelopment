@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: com.manudev.coinService.service.impl.CoinServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.901 s <<< FAILURE! -- in com.manudev.coinService.service.impl.CoinServiceImplTest
+com.manudev.coinService.service.impl.CoinServiceImplTest.findById_shouldReturnCoinDTO_withWrongSymbol_expectFail -- Time elapsed: 0.015 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: El símbolo esperado es ETH, pero el mock devuelve BTC ==> expected: <ETH> but was: <BTC>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1156)
+	at com.manudev.coinService.service.impl.CoinServiceImplTest.findById_shouldReturnCoinDTO_withWrongSymbol_expectFail(CoinServiceImplTest.java:133)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+

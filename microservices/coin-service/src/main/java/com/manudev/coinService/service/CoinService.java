@@ -1,7 +1,7 @@
 package com.manudev.coinService.service;
 
 import java.util.List;
-import com.manudev.common.dto.CoinDTO;
+import com.manudev.coinService.model.CoinDTO;
 
 public interface CoinService {
 
