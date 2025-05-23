@@ -20,7 +20,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Simular Error 3: Falta de dependencia (descomenta para probar)
+      # Simular Error 3: Falta de dependencia
       - name: Skip commons install (provoca error)
         run: echo "Skipping commons install on purpose"
 

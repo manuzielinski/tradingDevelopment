@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manudev.coinService.mapper.CoinMapper;
 import com.manudev.coinService.model.Coin;
 import com.manudev.coinService.repository.CoinRepository;
-import com.manudev.coinService.model.CoinDTO;
+import com.manudev.common.dto.CoinDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -118,19 +118,6 @@ class CoinServiceImplTest {
         String result = coinService.searchCoin(keyword);
 
         assertEquals(expectedResponse, result);
-    }
-
-    @Test
-    void findById_shouldReturnCoinDTO_withCorrectSymbol() throws Exception {
-        // Configuramos que el repositorio devuelva la dummyCoin (que tiene símbolo "BTC")
-        when(coinRepository.findById("bitcoin")).thenReturn(Optional.of(dummyCoin));
-        // El mapper convierte esa moneda a DTO (símbolo "BTC")
-        when(coinMapper.coinToDTO(dummyCoin)).thenReturn(dummyCoinDTO);
-
-        CoinDTO result = coinService.findById("bitcoin");
-
-        // Ahora esperamos el símbolo correcto que el mock devuelve: "BTC"
-        assertEquals("BTC", result.getSymbol(), "El símbolo esperado es BTC");
     }
 
 

@@ -1,7 +1,7 @@
 package com.manudev.coinService.mapper;
 
 import com.manudev.coinService.model.Coin;
-import com.manudev.coinService.model.CoinDTO;
+import com.manudev.common.dto.CoinDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

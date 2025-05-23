@@ -97,8 +97,9 @@
         <dependency>
             <groupId>com.manudev</groupId>
             <artifactId>commons</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.1</version>
         </dependency>
+
 
         <!-- Testing -->
         <dependency>
