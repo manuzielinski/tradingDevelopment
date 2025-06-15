@@ -2,6 +2,7 @@ package com.manudev.userService.config;
 
 import com.manudev.userService.config.filter.JwtTokenValidator;
 import com.manudev.userService.config.filter.JwtUtil;
+import com.manudev.userService.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +13,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -27,36 +25,31 @@ public class SecurityConfig {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(crsf -> crsf.disable())
+                .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
-                    // endpoints publicos
+                    // Endpoints públicos
+                    http.requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/method/**").permitAll();
-                    //endpoints privados
+
+                    // Endpoints privados
                     http.requestMatchers(HttpMethod.POST, "/method/post").hasAuthority("CREATE");
                     http.requestMatchers(HttpMethod.GET, "/method/get").hasAnyRole("READ");
                     http.requestMatchers(HttpMethod.PUT, "/method/put").hasAnyRole("UPDATE");
                     http.requestMatchers(HttpMethod.DELETE, "/method/delete").hasAnyRole("DELETE");
 
-                    //config el resto de endpoints - NO ESPECIFICADOS
+                    // Cualquier otro endpoint no especificado: denegado
                     http.anyRequest().denyAll();
                 })
                 .addFilterBefore(new JwtTokenValidator(jwtUtil), BasicAuthenticationFilter.class)
                 .build();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("manuel")
-                .password("1234")
-                .roles("USER")
-                .build());
-        return manager;
     }
 
     @Bean
@@ -65,9 +58,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(HttpSecurity httpSecurity, PasswordEncoder passwordEncoder) throws Exception {
+    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity, PasswordEncoder passwordEncoder) throws Exception {
         AuthenticationManagerBuilder auth = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-        auth.userDetailsService(userDetailsService())
+        auth.userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder);
         return auth.build();
     }

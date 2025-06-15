@@ -60,7 +60,6 @@
             <version>4.4.0</version> <!-- o la última versión estable -->
         </dependency>
 
-
         <!-- Database -->
         <dependency>
             <groupId>com.mysql</groupId>

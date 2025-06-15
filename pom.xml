@@ -30,7 +30,6 @@
 	<modules>
 		<module>microservice-gateway</module>
 		<module>microservice-eureka</module>
-		<module>microservice-config</module>
 		<module>commons</module>
 		<module>coin-service</module>
 		<module>user-service</module>

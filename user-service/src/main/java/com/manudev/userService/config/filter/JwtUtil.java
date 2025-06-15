@@ -24,14 +24,10 @@ public class JwtUtil {
     @Value("${security.jwt.user.generator}")
     private String userGenerator;
 
-    public String createToken(Authentication authentication){
+    public String createToken(Authentication authentication) {
         Algorithm algorithm = Algorithm.HMAC256(privateKey);
 
-        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
-        String username = userEntity.getUsername();
-        String email = userEntity.getEmail();
-
-        // toma todas las authorities, las convierte en un stream, luego llama al metodo get authority y los agrupa separandolos por ,
+        String username = authentication.getName(); // ahora obtenemos el username directamente
         String authorities = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -40,7 +36,6 @@ public class JwtUtil {
         String JWTtoken = JWT.create()
                 .withIssuer(this.userGenerator)
                 .withSubject(username)
-                .withClaim("email", email)
                 .withClaim("authorities", authorities)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1800000))

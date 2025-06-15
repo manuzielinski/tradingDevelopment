@@ -21,10 +21,8 @@ import java.util.Collection;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
 
-    @Autowired
     private final JwtUtil jwtUtil;
 
-    // constr
     public JwtTokenValidator(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
@@ -36,25 +34,31 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
         String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if(jwtToken != null){
-            jwtToken = jwtToken.substring(7);
+        if (jwtToken != null && jwtToken.startsWith("Bearer ")) {
+            try {
+                jwtToken = jwtToken.substring(7);
+                DecodedJWT decodedJWT = jwtUtil.validateToken(jwtToken);
 
-            DecodedJWT decodedJWT = jwtUtil.validateToken(jwtToken);
+                String username = jwtUtil.extractUsername(decodedJWT);
+                String stringAuthorities = jwtUtil.getEspecificClaim(decodedJWT, "authorities").asString();
 
-            String username = jwtUtil.extractUsername(decodedJWT);
-            String stringAuthorities = jwtUtil.getEspecificClaim(decodedJWT, "authorities").asString();
+                Collection<? extends GrantedAuthority> authorities =
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(stringAuthorities);
 
-            // llamamos a AuthorityUtils y utilizamos el metodo para obtener los permisos separados por coma
-            Collection<? extends GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(stringAuthorities);
+                Authentication authentication =
+                        new UsernamePasswordAuthenticationToken(username, null, authorities);
 
-            SecurityContext context = SecurityContextHolder.getContext();
-            Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-            context.setAuthentication(authentication);
-            SecurityContextHolder.setContext(context);
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
+                context.setAuthentication(authentication);
+                SecurityContextHolder.setContext(context);
+
+            } catch (Exception e) {
+                // Si el token no es válido, simplemente no se establece autenticación
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);
-
     }
 }
-
