@@ -22,13 +22,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Simular Error 3: Falta de dependencia (descomenta para probar)
-      - name: Skip commons install (provoca error)
-        run: echo "Skipping commons install on purpose"
-
-      # Compilar commons
-      - name: Build commons module
-        run: mvn clean install -pl microservices/commons -am
+      - name: Build all modules
+        run: mvn clean install -DskipTests
 
       # Error 2: Linter Checkstyle
       - name: Run Checkstyle
