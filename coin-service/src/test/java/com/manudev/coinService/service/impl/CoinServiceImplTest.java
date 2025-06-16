@@ -121,5 +121,44 @@ class CoinServiceImplTest {
     }
 
 
+    @Test
+    void getCoinDetails_shouldHandleNullMarketData() throws Exception {
+        String coinId = "bitcoin";
+        String jsonResponse = """
+        {
+            "id": "bitcoin",
+            "name": "Bitcoin",
+            "symbol": "BTC",
+            "image": {"large": "https://example.com/btc.png"}
+        }
+    """;
+
+        String url = "https://api.coingecko.com/api/v3/coins/" + coinId;
+
+        when(restTemplate.exchange(eq(url), eq(HttpMethod.GET), any(HttpEntity.class), eq(String.class)))
+                .thenReturn(ResponseEntity.ok(jsonResponse));
+        when(objectMapper.readTree(jsonResponse)).thenReturn(new ObjectMapper().readTree(jsonResponse));
+        when(coinMapper.coinToDTO(any())).thenReturn(dummyCoinDTO);
+
+        CoinDTO result = coinService.getCoinDetails(coinId);
+
+        assertNotNull(result);
+        verify(coinRepository).save(any(Coin.class));
+    }
+
+    @Test
+    void getTop50CoinsByMarketCapRank_shouldReturnJson() throws Exception {
+        String expected = "[{\"id\":\"bitcoin\"}]";
+        String url = "https://api.coingecko.com/api/v3/coins/markets/vs_currency=usd&per_page=50&page=1";
+
+        when(restTemplate.exchange(eq(url), eq(HttpMethod.GET), any(HttpEntity.class), eq(String.class)))
+                .thenReturn(ResponseEntity.ok(expected));
+
+        String result = coinService.getTop50CoinsByMarketCapRank();
+
+        assertEquals(expected, result);
+    }
+
+
 
 }
