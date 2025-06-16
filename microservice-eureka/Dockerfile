@@ -1,14 +1,25 @@
-# Usa JDK 17 como base
-FROM eclipse-temurin:17-jdk-alpine
+# Etapa 1: Build
+FROM maven:3.9.6-eclipse-temurin-17 as build
 
-# Directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el JAR generado por Maven
-COPY target/eureka-service-*.jar app.jar
+# Copiar solo archivos necesarios
+COPY pom.xml .
+COPY src ./src
 
-# Exponer el puerto de Eureka
+# Construir el JAR
+RUN mvn clean package -DskipTests
+
+# Etapa 2: Imagen final con JDK
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+# Copiar el JAR generado desde la etapa de build
+COPY --from=build /app/target/*.jar app.jar
+
+# Puerto que usará Eureka
 EXPOSE 8761
 
-# Ejecutar la app
+# Comando de arranque
 ENTRYPOINT ["java", "-jar", "app.jar"]
