@@ -1,0 +1,75 @@
+name: CI - Coin Service
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Necesario para SonarCloud
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Simular Error 3: Falta de dependencia (descomenta para probar)
+      - name: Skip commons install (provoca error)
+        run: echo "Skipping commons install on purpose"
+
+      # Compilar commons
+      - name: Build commons module
+        run: mvn clean install -pl microservices/commons -am
+
+      # Error 2: Linter Checkstyle
+      - name: Run Checkstyle
+        run: mvn checkstyle:check
+
+      # Compilar coin-service
+      - name: Compile coin-service
+        run: mvn clean compile -pl microservices/coin-service -am
+
+      # Error 1: Test que falla
+      - name: Run tests
+        run: mvn test -pl microservices/coin-service -am
+
+      # Generar reporte de cobertura JaCoCo
+      - name: Run tests with coverage (JaCoCo)
+        run: mvn clean verify -pl microservices/coin-service -Pcoverage -am
+
+      # Cache de paquetes Sonar
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      # Cache de Maven
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      # Análisis SonarCloud
+      - name: Analyze with SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar \
+            -pl microservices/coin-service \
+            -Dsonar.projectKey=manuzielinski_tradingDevelopment \
+            -Dsonar.organization=manuzielinski \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.coverage.jacoco.xmlReportPaths=microservices/coin-service/target/site/jacoco/jacoco.xml
