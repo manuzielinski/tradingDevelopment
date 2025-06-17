@@ -13,6 +13,10 @@ public final class MicroserviceGatewayApplication {
 		throw new UnsupportedOperationException("Clase de utilidad");
 	}
 
+	/**
+	 * Método principal para ejecutar la aplicación Spring Boot del microservicio Gateway.
+	 * @param args Argumentos de línea de comandos.
+	 */
 	public static void main(final String[] args) {
 		SpringApplication.run(
 				MicroserviceGatewayApplication.class, args);
