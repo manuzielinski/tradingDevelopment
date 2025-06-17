@@ -22,12 +22,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+      - name: Build all modules (skip tests)
+        run: mvn clean install -DskipTests
+
+      - name: Compile coin-service
+        run: mvn clean compile -pl coin-service -am
+
+      - name: Run tests for coin-service
+        run: mvn test -pl coin-service -am
+
+      - name: Run tests with coverage (JaCoCo)
+        run: mvn clean verify -pl coin-service -Pcoverage -am
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
@@ -36,23 +41,18 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Build all modules (skip tests)
-        run: mvn clean install -DskipTests
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
-      - name: Compile coin-service
-        run: mvn clean compile -pl coin-service -am
-
-      - name: Run tests
-        run: mvn test -pl coin-service -am
-
-      - name: Run tests with coverage (JaCoCo)
-        run: mvn clean verify -pl coin-service -Pcoverage -am
-
-      - name: Analyze with SonarCloud
+      - name: Analyze coin-service with SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -f pom.xml sonar:sonar \
+          mvn sonar:sonar \
             -pl coin-service \
             -Dsonar.projectKey=manuzielinski_tradingDevelopment \
             -Dsonar.organization=manuzielinski \
