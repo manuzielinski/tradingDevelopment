@@ -22,7 +22,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build all modules
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Build all modules (skip tests)
         run: mvn clean install -DskipTests
 
       - name: Compile coin-service
@@ -33,20 +47,6 @@ jobs:
 
       - name: Run tests with coverage (JaCoCo)
         run: mvn clean verify -pl coin-service -Pcoverage -am
-
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
 
       - name: Analyze with SonarCloud
         env:
