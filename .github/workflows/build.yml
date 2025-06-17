@@ -25,19 +25,15 @@ jobs:
       - name: Build all modules
         run: mvn clean install -DskipTests
 
-      # Compilar coin-service
       - name: Compile coin-service
-        run: mvn clean compile -pl microservices/coin-service -am
+        run: mvn clean compile -pl coin-service -am
 
-      # Run tests
       - name: Run tests
-        run: mvn test -pl microservices/coin-service -am
+        run: mvn test -pl coin-service -am
 
-      # Generar reporte de cobertura JaCoCo
       - name: Run tests with coverage (JaCoCo)
-        run: mvn clean verify -pl microservices/coin-service -Pcoverage -am
+        run: mvn clean verify -pl coin-service -Pcoverage -am
 
-      # Cache de paquetes Sonar
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -45,7 +41,6 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      # Cache de Maven
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
@@ -53,14 +48,13 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Análisis SonarCloud
       - name: Analyze with SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn sonar:sonar \
-            -pl microservices/coin-service \
+            -pl coin-service \
             -Dsonar.projectKey=manuzielinski_tradingDevelopment \
             -Dsonar.organization=manuzielinski \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.coverage.jacoco.xmlReportPaths=microservices/coin-service/target/site/jacoco/jacoco.xml
+            -Dsonar.coverage.jacoco.xmlReportPaths=coin-service/target/site/jacoco/jacoco.xml
