@@ -10,15 +10,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public final class MicroserviceGatewayApplication {
 
 	private MicroserviceGatewayApplication() {
-		throw new UnsupportedOperationException("Clase de utilidad");
+		// Suppress default constructor for a utility class
+		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated.");
 	}
 
 	/**
 	 * Método principal para ejecutar la aplicación Spring Boot del microservicio Gateway.
-	 * @param args Argumentos de línea de comandos.
+	 * @param args Argumentos de línea de comandos pasados a la aplicación.
 	 */
 	public static void main(final String[] args) {
-		SpringApplication.run(
-				MicroserviceGatewayApplication.class, args);
+		SpringApplication.run(MicroserviceGatewayApplication.class, args);
 	}
 }
