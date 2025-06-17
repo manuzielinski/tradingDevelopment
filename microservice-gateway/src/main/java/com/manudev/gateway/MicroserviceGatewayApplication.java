@@ -9,11 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public final class MicroserviceGatewayApplication {
 
-	/**
-	 * Punto de entrada principal de la aplicación.
-	 *
-	 * @param args los argumentos de línea de comandos
-	 */
+	private MicroserviceGatewayApplication() {
+		throw new UnsupportedOperationException("Clase de utilidad");
+	}
+
 	public static void main(final String[] args) {
 		SpringApplication.run(
 				MicroserviceGatewayApplication.class, args);
