@@ -54,7 +54,7 @@ public class AssetController {
         return ResponseEntity.ok(assetDTO);
     }
 
-    @PostMapping
+    @DeleteMapping("/{assetId}")
     public ResponseEntity<String> deleteAsset(@PathVariable Long assetId) {
         assetService.deleteAsset(assetId);
         return ResponseEntity.ok("Asset deleted Successfully");

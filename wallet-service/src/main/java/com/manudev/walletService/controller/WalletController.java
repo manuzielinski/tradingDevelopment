@@ -25,35 +25,32 @@ public class WalletController {
     @Autowired
     private OrderClient orderClient;
 
-    @GetMapping("/api/wallet")
-    public ResponseEntity<Wallet> getUserWallet(@RequestHeader("Authorization") String jwt){
-
+    // GET /api/wallet
+    @GetMapping
+    public ResponseEntity<Wallet> getUserWallet(@RequestHeader("Authorization") String jwt) {
         UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
-
         Wallet wallet = walletService.getUserWallet(userDTO);
-
         return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/api/wallet/${walletId}/transfer")
+    // PUT /api/wallet/{walletId}/transfer
+    @PutMapping("/{walletId}/transfer")
     public ResponseEntity<Wallet> walletToWalletTransfer(@RequestHeader("Authorization") String jwt,
                                                          @PathVariable Long walletId,
                                                          @RequestBody WalletTransaction req) throws Exception {
-
         UserDTO senderUserDTO = userClient.findUserProfileByJwt(jwt);
         Wallet receiverWallet = walletService.findWalletById(walletId);
         Wallet wallet = walletService.WalletToWalletTransfer(senderUserDTO, receiverWallet, req.getAmount());
-
         return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/api/wallet/order/${orderId}/pay")
+    // PUT /api/wallet/order/{orderId}/pay
+    @PutMapping("/order/{orderId}/pay")
     public ResponseEntity<Wallet> payOrderPayment(@RequestHeader("Authorization") String jwt,
-                                                         @PathVariable Long orderId) throws Exception {
-
+                                                  @PathVariable Long orderId) throws Exception {
         UserDTO userDTO = userClient.findUserProfileByJwt(jwt);
-        OrderDTO orderDTO = orderClient.getOrderById(jwt,orderId);
-        Wallet wallet = walletService.payOrderPayment(orderDTO,userDTO);
+        OrderDTO orderDTO = orderClient.getOrderById(jwt, orderId);
+        Wallet wallet = walletService.payOrderPayment(orderDTO, userDTO);
         return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);
     }
 }
