@@ -22,6 +22,7 @@ public final class MicroserviceGatewayApplication {
 	 * @param args los argumentos de línea de comandos
 	 */
 	public static void main(final String[] args) {
-		SpringApplication.run(MicroserviceGatewayApplication.class, args);
+		SpringApplication.run(
+				MicroserviceGatewayApplication.class, args);
 	}
 }
