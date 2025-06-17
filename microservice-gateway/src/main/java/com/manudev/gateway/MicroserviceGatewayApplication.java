@@ -8,8 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public final class MicroserviceGatewayApplication {
-
-	/**
+	    /**
 	 * Constructor privado para evitar la instanciación de la clase.
 	 */
 	private MicroserviceGatewayApplication() {
