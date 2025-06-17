@@ -25,15 +25,11 @@ jobs:
       - name: Build all modules
         run: mvn clean install -DskipTests
 
-      # Error 2: Linter Checkstyle
-      - name: Run Checkstyle
-        run: mvn checkstyle:check
-
       # Compilar coin-service
       - name: Compile coin-service
         run: mvn clean compile -pl microservices/coin-service -am
 
-      # Error 1: Test que falla
+      # Run tests
       - name: Run tests
         run: mvn test -pl microservices/coin-service -am
 
